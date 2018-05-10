@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2015-2016 the original author or authors. Licensed under the 
+    Apache License, Version 2.0 (the "License"); you may not use this file except 
+    in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+    Unless required by applicable law or agreed to in writing, software distributed 
+    under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+    OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+    the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.o2osys.mng.mapper.BizTalkMapper">
+
+    <!-- 가맹점 리스트 -->
+    <select id="selectGrpTplt" parameterType="GrpTpltVO" resultType="GrpTpltVO">
+        SELECT * 
+        FROM MN_SY_GRP_TPLT 
+        WHERE TPLT_CODE = #{tpltCode}   
+    </select>
+
+	<!-- 카카오 비즈톡 템플릿 서비스 전송 결과 업데이트-->
+    <update id="updateGrpTpltStatus" parameterType="GrpTpltVO">
+        UPDATE MN_SY_GRP_TPLT /* 만나_시스템_그룹_템플릿 */
+        <set>
+            <if test='apprStatus != null'> APPR_STATUS = #{apprStatus},</if> /* 승인_상태 (0: 승인요청, 1: 승인완료, 2: 반려 3:승인요청실패) */
+            <if test='errorMsg != null'>   ERROR_MSG   = #{errorMsg},  </if> /* 반려 메세지 */
+            <if test='userId != null'>     MOD_USER_ID = #{userId},    </if> /* 수정사용자_ID */
+            MOD_DATE = SYSDATE    /* 수정일시 */
+        </set>
+        WHERE TPLT_CODE = #{tpltCode}
+    </update>
+
+</mapper>

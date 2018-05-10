@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2015-2016 the original author or authors. Licensed under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.o2osys.mng.mapper.MngMapper">
+
+    <resultMap id="mnGrSt" type="MnGrSt">
+        <result property="stCode"     column="ST_CODE" />
+        <result property="putDate"    column="PUT_DATE" />    
+        <result property="putUserId"  column="PUT_USER_ID" />        
+        <result property="StName"     column="ST_NAME" />         
+        <result property="stNameApp"  column="ST_NAME_APP" />      
+        <result property="stOwner"    column="ST_OWNER" />      
+        <result property="stTel"      column="ST_TEL" />      
+    </resultMap>
+    
+    <resultMap id="cursorResult" type="java.util.LinkedHashMap" />
+    
+    <!-- 가맹점 리스트 -->
+    <select id="mnGrStList" parameterType="map" statementType="CALLABLE" resultMap="mnGrSt">
+        
+	        SELECT * FROM (
+			    SELECT ROWNUM AS RNUM, B.* FROM(
+			        SELECT * FROM MN_GR_ST ORDER BY ST_CODE
+			    ) B
+			    WHERE <![CDATA[ ROWNUM<=#{endCount} ]]>
+			)
+			WHERE <![CDATA[ RNUM>=#{startCount} ]]>
+		
+    </select>
+    
+    
+    <!-- 가맹점 리스트 -->
+    <select id="mnGrStListSize" statementType="CALLABLE" resultType="int">
+        SELECT COUNT(*) 
+          FROM MN_GR_ST
+    </select>
+    
+</mapper>

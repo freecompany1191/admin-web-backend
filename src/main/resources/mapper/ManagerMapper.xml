@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2015-2016 the original author or authors. Licensed under the 
+    Apache License, Version 2.0 (the "License"); you may not use this file except 
+    in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+    Unless required by applicable law or agreed to in writing, software distributed 
+    under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+    OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+    the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.o2osys.mng.mapper.ManagerMapper">
+
+    <resultMap id="cursorResults1" type="java.util.LinkedHashMap"/>
+    <resultMap id="cursorResults2" type="java.util.LinkedHashMap"/>
+    <resultMap id="cursorResults3" type="java.util.LinkedHashMap"/>
+    
+    <!-- 웹 관리자 로그인 -->
+    <select id="spSyApiWeb" parameterType="map" statementType="CALLABLE" resultType="hashmap">
+        { 
+            CALL SP_SY_API_WEB (
+                #{in_REQ_NUM, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{in_LANGUAGE, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{in_DEVICE, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{in_SERVICE_YN, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{in_VALUE, mode=IN, jdbcType=VARCHAR, javaType=string},
+                #{in_INFO, mode=IN, jdbcType=VARCHAR, javaType=string},
+                
+                #{out_CODE, mode=OUT, jdbcType=INTEGER, javaType=int},
+                #{out_MSG, mode=OUT, jdbcType=VARCHAR, javaType=string},
+                #{out_VALUE, mode=OUT, jdbcType=VARCHAR, javaType=string},
+                #{out_ROW1, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=cursorResults1},
+                #{out_ROW2, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=cursorResults2},
+                #{out_ROW3, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=cursorResults3}
+            )
+        }
+    </select>
+    
+    <!-- 관리웹사이트 전문 연결 API -->
+    <select id="spSyApiAdmWeb" parameterType="map" statementType="CALLABLE" resultType="hashmap">
+        
+	        { 
+        <choose>
+	        <when test='REQ_TYPE != null and REQ_TYPE == "201"'>
+               CALL SP_SY_API_ADM_WEB_1	            
+	        </when>
+	        <when test='REQ_TYPE != null and REQ_TYPE == "202"'>
+               CALL SP_SY_API_ADM_WEB_2             
+            </when>
+            <when test='REQ_TYPE != null and REQ_TYPE == "203"'>
+               CALL SP_SY_API_ADM_WEB_3             
+            </when>
+            <when test='REQ_TYPE != null and REQ_TYPE == "204"'>
+               CALL SP_SY_API_ADM_WEB_4           
+            </when>
+	        <otherwise>
+               CALL SP_SY_API_ADM_WEB
+	        </otherwise>
+        </choose>
+                (
+	                #{in_REQ_NUM, mode=IN, jdbcType=VARCHAR, javaType=string},
+	                #{in_LANGUAGE, mode=IN, jdbcType=VARCHAR, javaType=string},
+	                #{in_DEVICE, mode=IN, jdbcType=VARCHAR, javaType=string},
+	                #{in_SERVICE_YN, mode=IN, jdbcType=VARCHAR, javaType=string},
+	                #{in_VALUE, mode=IN, jdbcType=VARCHAR, javaType=string},
+	                #{in_INFO, mode=IN, jdbcType=VARCHAR, javaType=string},
+	                
+	                #{out_CODE, mode=OUT, jdbcType=INTEGER, javaType=int},
+	                #{out_MSG, mode=OUT, jdbcType=VARCHAR, javaType=string},
+	                #{out_VALUE, mode=OUT, jdbcType=VARCHAR, javaType=string},
+	                #{out_ROW1, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=cursorResults1},
+	                #{out_ROW2, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=cursorResults2},
+	                #{out_ROW3, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=cursorResults3}
+	            )
+	        }
+    </select>
+    
+</mapper>
